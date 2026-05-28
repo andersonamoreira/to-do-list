@@ -1,0 +1,234 @@
+### Variáveis - altere conforme necessário
+@baseUrl = http://localhost:3000
+@token = COLE_SEU_TOKEN_AQUI
+@adminToken = COLE_TOKEN_ADMIN_AQUI
+@projectId = COLE_ID_DO_PROJETO
+@taskId = COLE_ID_DA_TAREFA
+@labelId = COLE_ID_DA_ETIQUETA
+@userId = COLE_ID_DO_USUARIO
+
+# =============================================
+# AUTENTICAÇÃO
+# =============================================
+
+### 1. Registrar novo usuário
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "name": "João Silva",
+  "email": "joao@example.com",
+  "password": "senha123"
+}
+
+### 2. Login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "joao@example.com",
+  "password": "senha123"
+}
+
+### 3. Dados do usuário autenticado
+GET {{baseUrl}}/auth/me
+Authorization: Bearer {{token}}
+
+# =============================================
+# USUÁRIOS
+# =============================================
+
+### 4. Listar todos os usuários (ADMIN)
+GET {{baseUrl}}/users
+Authorization: Bearer {{adminToken}}
+
+### 5. Buscar usuário por ID
+GET {{baseUrl}}/users/{{userId}}
+Authorization: Bearer {{token}}
+
+### 6. Atualizar usuário
+PUT {{baseUrl}}/users/{{userId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "João Silva Atualizado"
+}
+
+### 7. Deletar usuário (ADMIN)
+DELETE {{baseUrl}}/users/{{userId}}
+Authorization: Bearer {{adminToken}}
+
+# =============================================
+# PROJETOS
+# =============================================
+
+### 8. Criar projeto
+POST {{baseUrl}}/projects
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Meu Primeiro Projeto",
+  "description": "Projeto de gerenciamento de tarefas"
+}
+
+### 9. Listar meus projetos
+GET {{baseUrl}}/projects
+Authorization: Bearer {{token}}
+
+### 10. Buscar projeto por ID (com tarefas e colaboradores)
+GET {{baseUrl}}/projects/{{projectId}}
+Authorization: Bearer {{token}}
+
+### 11. Atualizar projeto (dono)
+PUT {{baseUrl}}/projects/{{projectId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Nome Atualizado",
+  "description": "Nova descrição"
+}
+
+### 12. Deletar projeto (dono, soft delete)
+DELETE {{baseUrl}}/projects/{{projectId}}
+Authorization: Bearer {{token}}
+
+### 13. Adicionar colaborador ao projeto (dono)
+POST {{baseUrl}}/projects/{{projectId}}/collaborators
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "userId": "{{userId}}"
+}
+
+### 14. Remover colaborador do projeto (dono)
+DELETE {{baseUrl}}/projects/{{projectId}}/collaborators/{{userId}}
+Authorization: Bearer {{token}}
+
+# =============================================
+# TAREFAS
+# =============================================
+
+### 15. Criar tarefa no projeto
+POST {{baseUrl}}/projects/{{projectId}}/tasks
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "title": "Implementar autenticação",
+  "description": "JWT + bcrypt",
+  "status": "PENDING",
+  "dueDate": "2026-06-30T23:59:59Z"
+}
+
+### 16. Listar tarefas do projeto
+GET {{baseUrl}}/projects/{{projectId}}/tasks
+Authorization: Bearer {{token}}
+
+### 17. Listar tarefas filtradas por status
+GET {{baseUrl}}/projects/{{projectId}}/tasks?status=PENDING
+Authorization: Bearer {{token}}
+
+### 18. Buscar tarefa por ID (com etiquetas)
+GET {{baseUrl}}/tasks/{{taskId}}
+Authorization: Bearer {{token}}
+
+### 19. Atualizar tarefa (criador ou dono do projeto)
+PUT {{baseUrl}}/tasks/{{taskId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "title": "Título Atualizado",
+  "status": "IN_PROGRESS"
+}
+
+### 20. Deletar tarefa (criador ou dono do projeto, soft delete)
+DELETE {{baseUrl}}/tasks/{{taskId}}
+Authorization: Bearer {{token}}
+
+### 21. Adicionar etiqueta à tarefa
+POST {{baseUrl}}/tasks/{{taskId}}/labels
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "labelId": "{{labelId}}"
+}
+
+### 22. Remover etiqueta da tarefa
+DELETE {{baseUrl}}/tasks/{{taskId}}/labels/{{labelId}}
+Authorization: Bearer {{token}}
+
+# =============================================
+# ETIQUETAS
+# =============================================
+
+### 23. Criar etiqueta (ADMIN)
+POST {{baseUrl}}/labels
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "name": "Bug",
+  "color": "#FF0000"
+}
+
+### 24. Listar etiquetas
+GET {{baseUrl}}/labels
+Authorization: Bearer {{token}}
+
+### 25. Buscar etiqueta por ID
+GET {{baseUrl}}/labels/{{labelId}}
+Authorization: Bearer {{token}}
+
+### 26. Atualizar etiqueta (ADMIN)
+PUT {{baseUrl}}/labels/{{labelId}}
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "name": "Bug Crítico",
+  "color": "#CC0000"
+}
+
+### 27. Deletar etiqueta (ADMIN)
+DELETE {{baseUrl}}/labels/{{labelId}}
+Authorization: Bearer {{adminToken}}
+
+# =============================================
+# FLUXO COMPLETO DE EXEMPLO
+# =============================================
+
+### Passo 1: Registrar usuário e copiar token da resposta
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "name": "Admin User",
+  "email": "admin@example.com",
+  "password": "admin123"
+}
+
+### Passo 2: Criar um projeto com o token obtido
+POST {{baseUrl}}/projects
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Projeto Demo",
+  "description": "Demonstração do sistema"
+}
+
+### Passo 3: Criar tarefa no projeto (use o ID retornado)
+POST {{baseUrl}}/projects/{{projectId}}/tasks
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "title": "Primeira Tarefa",
+  "status": "PENDING"
+}
