@@ -47,11 +47,17 @@ export function TodayPage() {
     } catch { /* ignore */ }
   }
 
-  const isTaskToday = (t: Task) => t.dueDate?.slice(0, 10) === todayStr
-  const isTaskOverdue = (t: Task) => !!t.dueDate && t.dueDate.slice(0, 10) < todayStr
+  // Separação apenas para fins visuais — toda tarefa retornada pelo backend aparece em alguma seção
+  const overdueTasks = tasks.filter(t => !!t.dueDate && t.dueDate.slice(0, 10) < todayStr)
+  const todayTasks   = tasks.filter(t => !t.dueDate || t.dueDate.slice(0, 10) >= todayStr)
 
-  const todayTasks = tasks.filter(isTaskToday)
-  const overdueTasks = tasks.filter(isTaskOverdue)
+  // Contadores calculados apenas das tarefas visíveis nos cards
+  const visibleTasks = includeOverdue ? tasks : todayTasks
+  const counts = {
+    pending:    visibleTasks.filter(t => t.status === 'PENDING').length,
+    inProgress: visibleTasks.filter(t => t.status === 'IN_PROGRESS').length,
+    done:       visibleTasks.filter(t => t.status === 'DONE').length,
+  }
 
   const projectNames: Record<string, string> = {}
   tasks.forEach(t => { if (t.project) projectNames[t.project.id] = t.project.name })
@@ -63,12 +69,6 @@ export function TodayPage() {
       acc[key].push(task)
       return acc
     }, {})
-  }
-
-  const counts = {
-    pending: tasks.filter(t => t.status === 'PENDING').length,
-    inProgress: tasks.filter(t => t.status === 'IN_PROGRESS').length,
-    done: tasks.filter(t => t.status === 'DONE').length,
   }
 
   if (loading) return (
