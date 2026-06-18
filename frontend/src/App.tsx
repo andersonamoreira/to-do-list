@@ -19,6 +19,7 @@ export default function App() {
           <Route element={<Layout />}>
             <Route path="/" element={<DashboardPage />} />
             <Route path="/projects/:id" element={<ProjectPage />} />
+            <Route path="/today" element={<TodayPage />} />
             <Route path="/labels" element={<LabelsPage />} />
             <Route path="/profile" element={<ProfilePage />} />
           </Route>
