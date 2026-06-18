@@ -116,7 +116,7 @@ export function TodayPage() {
       </div>
 
       {/* Resumo */}
-      {tasks.length > 0 && (
+      {visibleTasks.length > 0 && (
         <div className="mb-6 flex gap-3 flex-wrap">
           {counts.pending > 0 && (
             <div className="rounded-xl bg-amber-50 border border-amber-100 px-4 py-2 text-sm font-medium text-amber-700">
