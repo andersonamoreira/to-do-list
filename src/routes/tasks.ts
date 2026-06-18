@@ -86,7 +86,7 @@ tasksRouter.get('/projects/:projectId/tasks', authenticate, async (req, res) => 
       createdBy: { select: { id: true, name: true, email: true } },
       labels: { include: { label: true } },
     },
-    orderBy: [{ dueDate: { sort: 'desc', nulls: 'last' } }, { createdAt: 'desc' }],
+    orderBy: [{ dueDate: { sort: 'asc', nulls: 'last' } }, { createdAt: 'desc' }],
   })
   res.json({ tasks })
 })
