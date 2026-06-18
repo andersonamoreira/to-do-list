@@ -1,0 +1,18 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "shell": "powershell",
+            "command": "cd 'c:\\Projects\\to-do-list'; $status = git status --porcelain; if ($status) { git add .; $ts = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'; git commit -m \"auto: $ts\"; git push origin main }",
+            "async": true,
+            "statusMessage": "Sincronizando com GitHub..."
+          }
+        ]
+      }
+    ]
+  }
+}
