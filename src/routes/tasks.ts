@@ -62,7 +62,7 @@ tasksRouter.get('/tasks/today', authenticate, async (req, res) => {
   const userId = req.user!.sub
   const isAdmin = req.user!.role === 'ADMIN'
 
-  const { date } = req.query
+  const { date, includeOverdue, includeDone } = req.query
   const target = date ? String(date) : new Date().toISOString().slice(0, 10)
   const start = new Date(target + 'T00:00:00.000Z')
   const end   = new Date(target + 'T23:59:59.999Z')
@@ -71,15 +71,30 @@ tasksRouter.get('/tasks/today', authenticate, async (req, res) => {
     ? { deletedAt: null }
     : { deletedAt: null, OR: [{ ownerId: userId }, { collaborators: { some: { userId } } }] }
 
+  const dueDateWhere = includeOverdue === 'true'
+    ? { lte: end }
+    : { gte: start, lte: end }
+
+  const statusWhere = includeDone === 'true'
+    ? undefined
+    : includeOverdue === 'true'
+      ? { not: 'DONE' as const }
+      : undefined
+
   const tasks = await prisma.task.findMany({
-    where: { deletedAt: null, dueDate: { gte: start, lte: end }, project: projectWhere },
+    where: {
+      deletedAt: null,
+      dueDate: dueDateWhere,
+      ...(statusWhere ? { status: statusWhere } : {}),
+      project: projectWhere,
+    },
     include: {
       project: { select: { id: true, name: true } },
       assignee: { select: { id: true, name: true, email: true } },
       createdBy: { select: { id: true, name: true, email: true } },
       labels: { include: { label: true } },
     },
-    orderBy: [{ status: 'asc' }, { createdAt: 'desc' }],
+    orderBy: [{ dueDate: 'asc' }, { status: 'asc' }, { createdAt: 'desc' }],
   })
   res.json({ tasks })
 })
