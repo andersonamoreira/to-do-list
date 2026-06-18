@@ -79,7 +79,7 @@ export function TaskCard({ task, onEdit, onDelete, onStatusChange, canEdit }: Ta
         {task.dueDate && (
           <span className={`flex items-center gap-1 ${overdue && task.status !== 'DONE' ? 'text-rose-500 font-medium' : ''}`}>
             <Calendar size={12} />
-            {new Date(task.dueDate).toLocaleDateString('pt-BR')}
+            {formatDate(task.dueDate)}
           </span>
         )}
       </div>
