@@ -34,6 +34,7 @@ export interface Task {
   assignee?: { id: string; name: string; email: string } | null
   createdBy?: { id: string; name: string; email: string }
   labels?: Array<{ label: Label }>
+  project?: { id: string; name: string }
 }
 
 export interface Label {
