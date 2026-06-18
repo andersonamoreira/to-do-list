@@ -29,7 +29,13 @@ const STATUS_COLOR: Record<Task['status'], string> = {
 
 function isOverdue(dueDate?: string | null) {
   if (!dueDate) return false
-  return new Date(dueDate) < new Date()
+  const taskDate = dueDate.slice(0, 10)
+  const today = new Date().toLocaleDateString('en-CA')
+  return taskDate < today
+}
+
+function formatDate(dueDate: string) {
+  return new Date(dueDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' })
 }
 
 export function TaskCard({ task, onEdit, onDelete, onStatusChange, canEdit }: TaskCardProps) {
