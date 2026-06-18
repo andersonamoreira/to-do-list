@@ -134,7 +134,7 @@ export function TodayPage() {
             </div>
           )}
           <div className="rounded-xl bg-violet-50 border border-violet-100 px-4 py-2 text-sm font-semibold text-violet-700">
-            Total: {tasks.length}
+            Total: {visibleTasks.length}
           </div>
         </div>
       )}
