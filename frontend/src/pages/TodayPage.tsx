@@ -49,13 +49,6 @@ export function TodayPage() {
     } catch { /* ignore */ }
   }
 
-  const grouped = tasks.reduce<Record<string, Task[]>>((acc, task) => {
-    const key = task.project?.id ?? 'unknown'
-    if (!acc[key]) acc[key] = []
-    acc[key].push(task)
-    return acc
-  }, {})
-
   const projectNames: Record<string, string> = {}
   tasks.forEach(t => { if (t.project) projectNames[t.project.id] = t.project.name })
 
