@@ -39,4 +39,9 @@ export const tasksApi = {
 
   removeLabel: (taskId: string, labelId: string) =>
     apiFetch<null>(`/tasks/${taskId}/labels/${labelId}`, { method: 'DELETE' }),
+
+  today: (date?: string) => {
+    const d = date ?? new Date().toLocaleDateString('en-CA')
+    return apiFetch<{ tasks: Task[] }>(`/tasks/today?date=${d}`)
+  },
 }
