@@ -57,7 +57,7 @@ export function TaskModal({ open, onClose, onSaved, projectId, task, labels, def
         title: title.trim(),
         description: description.trim() || undefined,
         status,
-        dueDate: dueDate ? new Date(dueDate).toISOString() : null,
+        dueDate: dueDate ? new Date(dueDate + 'T12:00:00').toISOString() : null,
       }
 
       if (task) {
