@@ -77,9 +77,7 @@ tasksRouter.get('/tasks/today', authenticate, async (req, res) => {
 
   const statusWhere = includeDone === 'true'
     ? undefined
-    : includeOverdue === 'true'
-      ? { not: 'DONE' as const }
-      : undefined
+    : { not: 'DONE' as const }
 
   const tasks = await prisma.task.findMany({
     where: {
