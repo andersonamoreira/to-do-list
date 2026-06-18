@@ -139,7 +139,7 @@ export function TodayPage() {
         </div>
       )}
 
-      {tasks.length === 0 ? (
+      {visibleTasks.length === 0 ? (
         <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 py-20 text-center">
           <CalendarDays size={40} className="text-gray-300 mb-3" />
           <p className="text-base font-medium text-gray-500">Nenhuma tarefa para hoje</p>
