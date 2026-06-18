@@ -7,6 +7,7 @@ import { DashboardPage } from './pages/DashboardPage'
 import { ProjectPage } from './pages/ProjectPage'
 import { LabelsPage } from './pages/LabelsPage'
 import { ProfilePage } from './pages/ProfilePage'
+import { TodayPage } from './pages/TodayPage'
 
 export default function App() {
   return (
